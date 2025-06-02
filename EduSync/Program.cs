@@ -11,8 +11,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000",
-                "https://gray-moss-0fe93b800.6.azurestaticapps.net")
+            policy.WithOrigins(
+                            "http://localhost:3000",
+                            "https://gray-moss-0fe93b800.6.azurestaticapps.net"
+            )
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
@@ -42,7 +44,6 @@ else
 {
     Console.WriteLine("Connection string loaded.");
 }
-
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

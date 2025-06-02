@@ -1,0 +1,83 @@
+# # ASP.NET Core (.NET Framework)
+# # Build and test ASP.NET Core projects targeting the full .NET Framework.
+# # Add steps that publish symbols, save build artifacts, and more:
+# # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+# trigger:
+# - main
+
+# pool:
+#   vmImage: 'windows-latest'
+
+# variables:
+#   solution: '**/*.sln'
+#   buildPlatform: 'Any CPU'
+#   buildConfiguration: 'Release'
+
+# steps:
+# - task: NuGetToolInstaller@1
+
+# - task: NuGetCommand@2
+#   inputs:
+#     restoreSolution: '$(solution)'
+
+# - task: VSBuild@1
+#   inputs:
+#     solution: '$(solution)'
+#     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+#     platform: '$(buildPlatform)'
+#     configuration: '$(buildConfiguration)'
+
+# - task: VSTest@2
+#   inputs:
+#     platform: '$(buildPlatform)'
+#     configuration: '$(buildConfiguration)'
+
+# azure-pipelines-backend.yml
+# This pipeline builds and deploys the ASP.NET Core backend to Azure App Service
+
+# Trigger the pipeline on pushes to the main branch
+trigger:
+- main
+
+# Use a Microsoft-hosted agent VM image
+pool:
+  vmImage: 'ubuntu-latest' # Or 'windows-latest' if your App Service OS is Windows
+
+variables:
+  buildConfiguration: 'Release' # Standard build configuration
+  # --- Azure App Service Details ---
+  # Replace with the exact name of your Azure App Service
+  azureAppName: 'EduSyncBackendWebApp' # <-- Replace with your App Service name (e.g., 'edusync-backend-api')
+  # ---------------------------------
+
+# Define the steps (tasks) for the pipeline
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.x' # Specify the .NET SDK version used by your project (e.g., 8.x)
+  displayName: 'Install .NET SDK'
+
+- script: dotnet restore
+  displayName: 'Restore Dependencies'
+
+- script: dotnet build --configuration $(buildConfiguration) --no-restore
+  displayName: 'Build .NET Project'
+
+#- script: dotnet test --no-build --verbosity normal # Uncomment if you have unit tests
+#  displayName: 'Run Tests'
+
+- script: dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory) --no-build
+  displayName: 'Publish .NET Project'
+
+- task: AzureWebApp@1
+  inputs:
+    # --- Azure Deployment Details ---
+    azureSubscription: 'EduSyncBackendSerConn' # <-- Ensure this matches your Service Connection Name
+    appType: 'webApp' # or 'webAppLinux' if your App Service OS is Linux
+    appName: '$(azureAppName)' # Uses the variable defined above
+    package: '$(Build.ArtifactStagingDirectory)' # Deploys the published output
+    # --------------------------------
+  displayName: 'Deploy to Azure App Service'
+
