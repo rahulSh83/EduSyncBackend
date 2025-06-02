@@ -69,15 +69,15 @@ namespace webapi.DTOs
     }
 }
 
-namespace webapi.DTOs
-{
-    public class ForgotPasswordDto
-    {
-        public string Email { get; set; }
-        public string NewPassword { get; set; }
-    }
+// namespace webapi.DTOs
+// {
+//     public class ForgotPasswordDto
+//     {
+//         public string Email { get; set; }
+//         public string NewPassword { get; set; }
+//     }
 
-}
+// }
 
 namespace webapi.DTOs
 {
