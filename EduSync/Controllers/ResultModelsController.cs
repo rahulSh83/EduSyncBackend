@@ -9,6 +9,7 @@ using EduSync.Data;
 using EduSync.Models;
 using webapi.DTOs;
 using Microsoft.Extensions.Logging;
+using EduSyncAPI.Services;
 
 namespace EduSync.Controllers
 {
@@ -18,11 +19,13 @@ namespace EduSync.Controllers
     {
         private readonly AppDbContext _context;
         private readonly ILogger<ResultModelsController> _logger;
+        private readonly EventHubService _eventHubService;
 
-        public ResultModelsController(AppDbContext context, ILogger<ResultModelsController> logger)
+        public ResultModelsController(AppDbContext context, ILogger<ResultModelsController> logger, EventHubService eventHubService)
         {
             _context = context;
             _logger = logger;
+            _eventHubService = eventHubService;
         }
 
         // GET: api/ResultModels
@@ -173,6 +176,9 @@ namespace EduSync.Controllers
             {
                 await _context.SaveChangesAsync();
                 _logger.LogInformation("Updated result model with ID: {ResultId}", id);
+
+                // Send update event
+                await _eventHubService.SendEventAsync(resultModel, "ResultUpdated");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -208,6 +214,9 @@ namespace EduSync.Controllers
 
             _logger.LogInformation("Created new result model with ID: {ResultId}", resultModel.ResultId);
 
+            // Send event to Event Hub
+            await _eventHubService.SendEventAsync(resultModel, "ResultCreated");
+
             return CreatedAtAction(nameof(GetResultModel), new { id = resultModel.ResultId }, resultModel);
         }
 
@@ -226,6 +235,10 @@ namespace EduSync.Controllers
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Successfully deleted result model with ID: {ResultId}", id);
+
+            // Send delete event
+            await _eventHubService.SendEventAsync(resultModel, "ResultDeleted");
+
             return NoContent();
         }
 
