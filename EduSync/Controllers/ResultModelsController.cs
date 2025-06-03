@@ -18,8 +18,8 @@ namespace EduSync.Controllers
     public class ResultModelsController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly ILogger<ResultModelsController> _logger;
         private readonly EventHubService _eventHubService;
+        private readonly ILogger<ResultModelsController> _logger;
 
         public ResultModelsController(AppDbContext context, ILogger<ResultModelsController> logger, EventHubService eventHubService)
         {
@@ -215,7 +215,15 @@ namespace EduSync.Controllers
             _logger.LogInformation("Created new result model with ID: {ResultId}", resultModel.ResultId);
 
             // Send event to Event Hub
-            await _eventHubService.SendEventAsync(resultModel, "ResultCreated");
+            try
+            {
+                await _eventHubService.SendEventAsync(resultModel, "ResultCreated");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send ResultCreated event to Event Hub.");
+                // Optionally continue without failing the whole request
+            }
 
             return CreatedAtAction(nameof(GetResultModel), new { id = resultModel.ResultId }, resultModel);
         }
