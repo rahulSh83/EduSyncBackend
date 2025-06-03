@@ -62,6 +62,21 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowFrontend");
 
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next.Invoke();
+    }
+    catch (Exception ex)
+    {
+        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Unhandled exception occurred.");
+        throw; // rethrow so standard error handler still triggers
+    }
+});
+
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

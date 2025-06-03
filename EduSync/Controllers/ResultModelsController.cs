@@ -137,24 +137,29 @@ namespace EduSync.Controllers
         public async Task<ActionResult<IEnumerable<object>>> GetStudentResults(Guid userId)
         {
             _logger.LogInformation("Fetching results for student ID: {UserId}", userId);
+            try {
+                var results = await _context.ResultModels
+                    .Where(r => r.UserId == userId)
+                    .Include(r => r.Assessment)
+                    .ThenInclude(a => a.Course)
+                    .Select(r => new
+                    {
+                        r.Assessment.AssessmentId,
+                        AssessmentTitle = r.Assessment.Title,
+                        CourseTitle = r.Assessment.Course != null ? r.Assessment.Course.Title : "Unknown",
+                        r.Score,
+                        MaxScore = r.Assessment.MaxScore,
+                        r.AttemptDate
+                    })
+                    .ToListAsync();
 
-            var results = await _context.ResultModels
-                .Where(r => r.UserId == userId)
-                .Include(r => r.Assessment)
-                .ThenInclude(a => a.Course)
-                .Select(r => new
-                {
-                    r.Assessment.AssessmentId,
-                    AssessmentTitle = r.Assessment.Title,
-                    CourseTitle = r.Assessment.Course.Title,
-                    r.Score,
-                    MaxScore=r.Assessment.MaxScore,
-                    r.AttemptDate
-                })
-                .ToListAsync();
-
-            return Ok(results);
-        }
+                return Ok(results);
+            }
+            catch(Exception ex){
+                _logger.LogError(ex, "Failed to load student results for user {UserId}", userId);
+                return StatusCode(500, "An error occurred while fetching student results.");
+            
+            }}
 
 
 
