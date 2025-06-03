@@ -53,8 +53,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddApplicationInsightsTelemetry();
 var app = builder.Build();
 
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole(); // Required for Azure log stream
+//builder.Logging.ClearProviders();
+//builder.Logging.AddConsole(); // Required for Azure log stream
 
 
 // Configure the HTTP request pipeline.
