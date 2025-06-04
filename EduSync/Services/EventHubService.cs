@@ -16,7 +16,10 @@ namespace EduSyncAPI.Services
             string eventHubName = configuration["AzureEventHubs:EventHubName"];
 
             _producerClient = new EventHubProducerClient(connectionString, eventHubName);
+
             _logger = logger;
+
+            _logger.LogInformation("Initializing EventHubProducerClient with event hub: " + eventHubName);
         }
 
         public async Task SendEventAsync<T>(T eventData, string eventType)
