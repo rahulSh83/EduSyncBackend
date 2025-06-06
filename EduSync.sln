@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduSync", "EduSync\EduSync.csproj", "{1643E2D0-EEA1-44B1-B405-CEC4DDFFD161}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduSync.Tests", "EduSync.Tests\EduSync.Tests.csproj", "{6A4AE349-D0FF-4760-9B48-5E3988330010}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduSync.Tests", "EduSync.Tests\EduSync.Tests.csproj", "{9D35F1EB-2D76-4EC7-86C0-54BBB782B6C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{1643E2D0-EEA1-44B1-B405-CEC4DDFFD161}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1643E2D0-EEA1-44B1-B405-CEC4DDFFD161}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1643E2D0-EEA1-44B1-B405-CEC4DDFFD161}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6A4AE349-D0FF-4760-9B48-5E3988330010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A4AE349-D0FF-4760-9B48-5E3988330010}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A4AE349-D0FF-4760-9B48-5E3988330010}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A4AE349-D0FF-4760-9B48-5E3988330010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D35F1EB-2D76-4EC7-86C0-54BBB782B6C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D35F1EB-2D76-4EC7-86C0-54BBB782B6C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D35F1EB-2D76-4EC7-86C0-54BBB782B6C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D35F1EB-2D76-4EC7-86C0-54BBB782B6C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
